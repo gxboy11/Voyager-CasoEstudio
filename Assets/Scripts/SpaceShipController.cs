@@ -28,6 +28,9 @@ public class SpaceShipController : MonoBehaviour
     [SerializeField]
     float hoverAcceleration = 2.0f;
 
+    [SerializeField]
+    float minAcceleration = 1.0f;
+
     [Header("Roll")]
     [SerializeField]
     float rollSpeed = 85.0f;
@@ -70,6 +73,11 @@ public class SpaceShipController : MonoBehaviour
     void FixedUpdate()
     {
 
+        if (!isMoving())
+        {
+            _rb.position += transform.forward * minAcceleration * Time.fixedDeltaTime;
+        }
+
         transform.Rotate(-_mouseDistance.y * _lookRateSpeed * Time.fixedDeltaTime,
             _mouseDistance.x * _lookRateSpeed * Time.fixedDeltaTime,
             _rollInput * rollSpeed * Time.fixedDeltaTime,
@@ -98,5 +106,14 @@ public class SpaceShipController : MonoBehaviour
 
         float currentHoverSpeed = Input.GetAxisRaw("Hover") * hoverSpeed; //Edit / Project Settings / Input
         _activeHoverSpeed = Mathf.Lerp(_activeHoverSpeed, currentHoverSpeed, hoverAcceleration * Time.deltaTime);
+    }
+
+    bool isMoving()
+    {
+        if (_rb.velocity.magnitude <= 0)
+        {
+            return false;
+        }
+        return true;
     }
 }
