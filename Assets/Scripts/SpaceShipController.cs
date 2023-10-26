@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpaceShipController : MonoBehaviour
 {
@@ -106,6 +107,28 @@ public class SpaceShipController : MonoBehaviour
 
         float currentHoverSpeed = Input.GetAxisRaw("Hover") * hoverSpeed; //Edit / Project Settings / Input
         _activeHoverSpeed = Mathf.Lerp(_activeHoverSpeed, currentHoverSpeed, hoverAcceleration * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Colision detectada con: " + collision.gameObject.tag);
+        if (collision.gameObject.CompareTag("Asteroid") || collision.gameObject.CompareTag("Enemy"))
+        {
+            // Se reinicia el juego
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Gatillo ingresado con: " + other.gameObject.tag);
+
+        if (other.gameObject.CompareTag("Asteroid") || other.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Tocado: " + other.gameObject.tag);
+            // Se reinicia el juego
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     bool isMoving()

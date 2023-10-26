@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DestroyerController : MonoBehaviour
 {
@@ -36,5 +37,16 @@ public class DestroyerController : MonoBehaviour
         _rb.position += transform.forward * forwardSpeed * Time.fixedDeltaTime;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
 
+        if (other.gameObject.CompareTag("Asteroid"))
+        {
+            Debug.Log("Enemigo ha tocado: " + other.gameObject.tag);
+            // Se reinicia el juego
+            Destroy(gameObject);
+        }
+
+
+    }
 }
