@@ -20,6 +20,9 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] float strafeAcceleration = 2.0F;
     [SerializeField] float hoverAcceleration = 2.0F;
 
+    [SerializeField]
+    float minAcceleration = 1.0f;
+
     [Header("Roll")]
     [SerializeField] float rollSpeed = 85.0F;
     [SerializeField] float rollAcceleration = 1.5F;
@@ -56,12 +59,17 @@ public class SpaceshipController : MonoBehaviour
     }
     void FixedUpdate()
     {
+    
+            if (!isMoving())
+        {
+            _rb.position += transform.forward * minAcceleration * Time.fixedDeltaTime;
+        }
 
         transform.Rotate(-_mouseDistance.y * Time.fixedDeltaTime * _lookRateSpeed,
                           _mouseDistance.x * Time.fixedDeltaTime * _lookRateSpeed,
                           _rollInput * Time.fixedDeltaTime * rollSpeed,
                           Space.Self);
-
+                          
         _rb.position += transform.forward * _activeForwardSpeed * Time.fixedDeltaTime;
         _rb.position += transform.right * _activeStrafeSpeed * Time.fixedDeltaTime;
         _rb.position += transform.up * _activeHoverSpeed * Time.fixedDeltaTime;
@@ -107,7 +115,7 @@ public class SpaceshipController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Colisión detectada con: " + collision.gameObject.tag);
+        Debug.Log("Colisiï¿½n detectada con: " + collision.gameObject.tag);
         if (collision.gameObject.CompareTag("Asteroid") || collision.gameObject.CompareTag("Destructor"))
         {
             // Se reinicia el juego
@@ -132,20 +140,13 @@ public class SpaceshipController : MonoBehaviour
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    bool isMoving()
+    {
+        if (_rb.velocity.magnitude <= 0)
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
