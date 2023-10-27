@@ -8,6 +8,9 @@ public class DestroyerController : MonoBehaviour
     [SerializeField]
     float forwardSpeed = 2.0f;
 
+    [SerializeField]
+    float lifes = 10.0F;
+
     Transform target; //Player
 
     Rigidbody _rb;
@@ -45,6 +48,16 @@ public class DestroyerController : MonoBehaviour
             Debug.Log("Enemigo ha tocado: " + other.gameObject.tag);
             // Se reinicia el juego
             Destroy(gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            Debug.Log("Menos una vida");
+            lifes = lifes - 1;
+            if ( lifes < 0 )
+            {
+                Destroy(gameObject);
+            }
         }
 
 
